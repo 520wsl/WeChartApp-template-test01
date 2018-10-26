@@ -1,0 +1,13 @@
+<!--pages/page10000/page10000.wxml-->
+<import src="/components/wxParse/wxParse.wxml" />
+<import src="/components/templates/templates.wxml" />
+
+<view class="app" hidden="{{page_hidden}}">
+    1
+    <!-- web-wiew组件 web-view 组件是一个可以用来承载网页的容器，会自动铺满整个小程序页面。-->
+    <web-view wx:if="{{false}}" src="{{false}}"></web-view>
+
+    <!-- 分享 页面 二维码 组件 -->
+    <component-share pagaQRCodeData="{{pagaQRCodeData}}"></component-share>
+
+</view>

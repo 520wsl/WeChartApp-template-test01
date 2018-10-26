@@ -1,0 +1,5 @@
+/* pages/page10000/page10000.wxss */
+page{
+  background-color: rgb(243, 243, 243);
+  margin-left: auto;
+}

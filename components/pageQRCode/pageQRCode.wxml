@@ -1,0 +1,4 @@
+<!--components/pageQRCode/pageQRCode.wxml-->
+<!-- 分享 页面 二维码 组件 -->
+<!-- 组件引用路径path  基于引用页面的当前文件夹 -->
+
