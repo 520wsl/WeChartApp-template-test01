@@ -47,7 +47,7 @@ Page({
             type: "album",
             hidden: false,
             style:
-                "background-color:rgb(255,255,255);font-size:28.125rpx;margin-top:0rpx;opacity:1;text-align:center;margin-left:auto;",
+                "background-color:rgb(255, 255, 255);font-size:28.125rpx;margin-top:0rpx;opacity:1;text-align:center;margin-left:auto;",
             ul_style:
                 "padding-left:82.03125rpx;padding-top:23.4375rpx;margin-left:auto;",
             html_mode: "sec-mode",
@@ -67,9 +67,9 @@ Page({
                         "http://img.weiye.me/zcimgdir/album/file_58fdb0d80f84a.png", // 图片
                     title: "优选", // 标题
                     li_style:
-                        "width:84.9609375rpx;border-radius:50%;margin-left:auto;", // li 的样式
+                        "width:84.9609375rpx;margin-right:82.03125rpx;margin-bottom:23.4375rpx;margin-left:auto;", // li 的样式
                     img_style:
-                        "height:94.9609375rpx;border-radius:50%;margin-left:auto;", // 图片 的样式
+                        "height:84.9609375rpx;border-radius:50%;margin-left:auto;", // 图片 的样式
                     eventParams:
                         '{"inner_page_link":"page10005","is_redirect":0}', // 事件 参数
                     eventHandler: "taplnnerLinkHandler" // 事件处理程序
@@ -88,9 +88,9 @@ Page({
                         "http://img.weiye.me/zcimgdir/album/file_58fdb0ed8ecdf.png", // 图片
                     title: "热销", // 标题
                     li_style:
-                        "width:84.9609375rpx;border-radius:50%;margin-left:auto;", // li 的样式
+                        "width:84.9609375rpx;margin-right:82.03125rpx;margin-bottom:23.4375rpx;margin-left:auto;", // li 的样式
                     img_style:
-                        "height:94.9609375rpx;border-radius:50%;margin-left:auto;", // 图片 的样式
+                        "height:84.9609375rpx;border-radius:50%;margin-left:auto;", // 图片 的样式
                     eventParams:
                         '{"inner_page_link":"page10006","is_redirect":0}', // 事件 参数
                     eventHandler: "tapInnerLinkHandler" // 事件处理程序
@@ -109,9 +109,9 @@ Page({
                         "http://img.weiye.me/zcimgdir/album/file_58fdb0ef0b1bf.png", // 图片
                     title: "分类", // 标题
                     li_style:
-                        "width:84.9609375rpx;border-radius:50%;margin-left:auto;", // li 的样式
+                        "width:84.9609375rpx;margin-right:82.03125rpx;margin-bottom:23.4375rpx;margin-left:auto;", // li 的样式
                     img_style:
-                        "height:84.9609375rpx;border-radius:50%;margin-left:auto", // 图片 的样式
+                        "height:84.9609375rpx;border-radius:50%;margin-left:auto;", // 图片 的样式
                     eventParams:
                         '{"inner_page_link":"page10007","is_redirect":0}', // 事件 参数
                     eventHandler: "tapInnerLinkHandler" // 事件处理程序
@@ -130,9 +130,9 @@ Page({
                         "http://img.weiye.me/zcimgdir/album/file_58fdb0ef3040a.png", // 图片
                     title: "优惠", // 标题
                     li_style:
-                        "width:84.9609375rpx;border-radius:50%;margin-left:auto;", // li 的样式
+                        "width:84.9609375rpx;margin-right:82.03125rpx;margin-bottom:23.4375rpx;margin-left:auto;", // li 的样式
                     img_style:
-                        "height:84.9609375rpx;border-radius:50%;margin-left:auto", // 图片 的样式
+                        "height:84.9609375rpx;border-radius:50%;margin-left:auto;", // 图片 的样式
                     eventParams:
                         '{"inner_page_link":"page10008","is_redirect":0}', // 事件 参数
                     eventHandler: "tapInnerLinkHandler" // 事件处理程序

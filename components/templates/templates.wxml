@@ -18,7 +18,8 @@
             indicator-dots="true" // 是否显示面板指示点
             indicator-color="{{data.customFeature.indicatorColor}}"  // 指示点颜色
             indicator-active-color="{{data.customFeature.indicatorActiveColor}}" // 当前选中的指示点颜色 -->
-        <swiper wx:if="{{!data.loading && !data.loadingFail && data.content.length > 0}}" circular="true" duration="750" autoplay="{{data.customFeature.autoplay}}" vertical="{{data.customFeature.vertical}}" interval="{{data.customFeature.interval*1000}}" indicator-dots="true" indicator-color="{{data.customFeature.indicatorColor}}" indicator-active-color="{{data.customFeature.indicatorActiveColor}}">
+        <swiper wx:if="{{!data.loading && !data.loadingFail && data.content.length > 0}}" circular="true" duration="750" autoplay="{{data.customFeature.autoplay}}" vertical="{{data.customFeature.vertical}}" interval="{{data.customFeature.interval*1000}}" indicator-dots="true"
+            indicator-color="{{data.customFeature.indicatorColor}}" indicator-active-color="{{data.customFeature.indicatorActiveColor}}">
             <!-- 遍历轮播内容 -->
             <block wx:for="{{data.content}}" wx:key="{{index}}">
                 <!-- wx:if="{{data.canIUseNavigatorTarget && item.customFeature.action=='turn-to-xcx'}}" // 根据 canIUseNavigatorTarget 是否有导航 以及 定制特征的动作 是否是 turn-to-xcx 来判断 图片是否添链接
@@ -73,6 +74,7 @@
         </view>
     </view>
 </template>
+
 <!-- 图集、图片列表 模板 -->
 <template name="zcAlbum">
     <!-- 模块 
@@ -96,7 +98,7 @@
         animationend - CSS 动画完成后触发 
         解析：
             绑定动画完成后出发的事件 -->
-    <view class='element album {{data.html_model}}' style='{{data.style}}' bindanimationend='animationEnd' data-compid='{{data.compld}}'>
+    <view class="element album {{data.html_mode}}" style="{{data.style}}" bindanimationend="animationEnd" data-compid="{{ data.compId }}">
         <!-- 解析：
                 根据 isSideslip 是否滚动  判断， 选择带滚动模块 还是 不滚动的模块。 -->
         <!-- scroll-view 滚动模块 -->
@@ -108,9 +110,9 @@
 
             解析：
                 微信小程序 组件 ccroll-view 可滚动视图区域。 -->
-            <scroll-view scroll-x='{{true}}' style="{{'height:'+albumWxsModule.scrollHeight(data.customFeature)+'rpx;padding-top:'+data.customFeature['padding-top']+'px;white-space:nowrap;'}}">
+            <scroll-view scroll-x="{{true}}" style="{{'height: '+albumWxsModule.scrollHeight(data.customFeature)+'rpx;padding-top:'+ data.customFeature['padding-top']+'px;white-space:nowrap;'}}">
                 <!-- 解析：遍历 内容 li -->
-                <block wx:for="{{data.li}}" wx:key="{{index}}">
+                <block wx:for="{{data.li}}" wx:key="">
                     <!-- wx:if="{{data.canIUseNavigatorTarget && item.customFeature.action=='turn-to-xcx'}}" 
                             canIUseNavigatorTarget 是否使用导航目标
                             customFeature.action // 定制特征的动作 
@@ -133,43 +135,70 @@
                                                                 如果当前小程序是正式版，则打开的小程序必定是正式版。 -->
                             <navigator target="miniProgram" open-type="navigate" app-id="{{item.customFeature['xcx-appid']}}" path="{{item.customFeature['xcx-page-url'] || ''}}" version="release">
                                 <image src="{{item.pic}}" style="{{item.img_style}}display:block;height:{{data.customFeature.imgHeight}};" mode="scaleToFill"></image>
+
                                 <text class="title">{{item.title}}</text>
+
                             </navigator>
+
                         </view>
                     </block>
+
+
                     <!-- 图片不带连接 -->
                     <block wx:else>
-                        <view class="{{item.li_class}}" style="{{'width:'+data.customFeature.width+';margin-left:'+data.customFeature['padding-left']+'px;' + (index == data.li.length -1 ? 'margin-right:' + data.customFeature['padding-left']+'px' : '')  }}" data-event-params="{{item.eventParams}}" catchtap="{{item.eventHandler}}">
+                        <view class="{{item.li_class}}" style="{{'width:'+data.customFeature.width+';margin-left:'+data.customFeature['padding-left']+'px;'+ (index == data.li.length - 1 ? 'margin-right:'+data.customFeature['padding-left']+'px' : '')  }}" data-event-params="{{item.eventParams}}"
+                            catchtap="{{item.eventHandler}}">
+
+
                             <image src="{{item.pic}}" style="{{item.img_style}}display:block;height: {{data.customFeature.imgHeight}};" mode="scaleToFill"></image>
+
                             <text class="title">{{item.title}}}</text>
+
                         </view>
+
                     </block>
                 </block>
+
             </scroll-view>
         </view>
         <!-- 不带滚动模块 -->
-        <view class='album-container background-ele clearfix' style='{{data.style}}' wx:else>
-            <block wx:for="{{data.li}}" wx:key="{{index}}">
+        <view class='album-container background-ele clearfix' style='{{data.ul_style}}' wx:else>
+            <block wx:for="{{data.li}}" wx:key="">
                 <!-- 判断是否 带导航链接 -->
                 <!-- 图片带连接 -->
                 <block wx:if="{{data.canIUseNavigatorTarget && item.customFeature.action == 'turn-to-xcx'}}">
+
                     <view class="{{item.li_class}}" style="{{item.li_style}}">
+
                         <navigator target="miniProgram" open-type="navigate" app-id="{{item.customFeature['xcx-appid']}}" path="{{item.customFeature['xcx-page-url'] || ''}}" version="release">
+
                             <image src="{{item.pic}}" style="{{item.img_style}}" mode="scaleToFill"></image>
+
                             <text class="title">{{item.title}}</text>
+
                         </navigator>
+
                     </view>
+
                 </block>
+
                 <!-- 图片不带连接 -->
                 <block wx:else>
                     <view class="{{item.li_class}}" style="{{item.li_style}}" data-event-params="{{item.eventParams}}" catchtap="{{item.eventHandler}}">
+
                         <image src="{{item.pic}}" style="{{item.img_style}}" mode="scaleToFill"></image>
+
                         <text class="title">{{item.title}}</text>
                     </view>
+
                 </block>
+
             </block>
+
         </view>
+
     </view>
+
 </template>
 <!-- 加载loading -->
 <template name="requestLoading">
