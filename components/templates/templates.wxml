@@ -109,8 +109,7 @@
             解析：
                 微信小程序 组件 ccroll-view 可滚动视图区域。 -->
             <scroll-view scroll-x='{{true}}' style="{{'height:'+albumWxsModule.scrollHeight(data.customFeature)+'rpx;padding-top:'+data.customFeature['padding-top']+'px;white-space:nowrap;'}}">
-                <!-- 解析：
-                        遍历 内容 li -->
+                <!-- 解析：遍历 内容 li -->
                 <block wx:for="{{data.li}}" wx:key="{{index}}">
                     <!-- wx:if="{{data.canIUseNavigatorTarget && item.customFeature.action=='turn-to-xcx'}}" 
                             canIUseNavigatorTarget 是否使用导航目标
@@ -120,6 +119,18 @@
                     <!-- 图片带连接 -->
                     <block wx:if="{{data.canIUseNavigatorTarget && item.customFeature.action == 'turn-to-xcx'}}">
                         <view class="{{item.li_class}}" style="{{'width:'+data.customFeature.width+';margin-left:'+data.customFeature['padding-left']+'px;'+ (index == data.li.length - 1 ? 'margin-right:'+data.customFeature['padding-left']+'px' : '')  }}">
+                            <!-- 解析：
+                                    navigator 链接配置 
+                                    target="miniProgram" // 在哪个目标上发生跳转，默认当前小程序，可选值self/miniProgram 
+                                        self 当前小程序
+                                        miniProgram  别的小程序 
+                                    open-type="navigate" // 跳转方式 
+                                        navigate // 对应 wx.navigateTo 或 wx.navigateToMiniProgram 的功能 // 保留当前页面，跳转到应用内的某个页面
+                                    app-id="{{item.customFeature['xcx-appid']}}" // 当target="miniProgram"时有效，要打开的小程序 appId
+                                    path="{{item.customFeature['xcx-page-url'] || ''}}" // 当target="miniProgram"时有效，打开的页面路径，如果为空则打开首页
+                                    version="release"  //  当target="miniProgram"时有效，要打开的小程序版本，有效值 develop（开发版），trial（体验版），release（正式版），
+                                                                仅在当前小程序为开发版或体验版时此参数有效；
+                                                                如果当前小程序是正式版，则打开的小程序必定是正式版。 -->
                             <navigator target="miniProgram" open-type="navigate" app-id="{{item.customFeature['xcx-appid']}}" path="{{item.customFeature['xcx-page-url'] || ''}}" version="release">
                                 <image src="{{item.pic}}" style="{{item.img_style}}display:block;height:{{data.customFeature.imgHeight}};" mode="scaleToFill"></image>
                                 <text class="title">{{item.title}}</text>
@@ -139,6 +150,8 @@
         <!-- 不带滚动模块 -->
         <view class='album-container background-ele clearfix' style='{{data.style}}' wx:else>
             <block wx:for="{{data.li}}" wx:key="{{index}}">
+                <!-- 判断是否 带导航链接 -->
+                <!-- 图片带连接 -->
                 <block wx:if="{{data.canIUseNavigatorTarget && item.customFeature.action == 'turn-to-xcx'}}">
                     <view class="{{item.li_class}}" style="{{item.li_style}}">
                         <navigator target="miniProgram" open-type="navigate" app-id="{{item.customFeature['xcx-appid']}}" path="{{item.customFeature['xcx-page-url'] || ''}}" version="release">
@@ -147,6 +160,7 @@
                         </navigator>
                     </view>
                 </block>
+                <!-- 图片不带连接 -->
                 <block wx:else>
                     <view class="{{item.li_class}}" style="{{item.li_style}}" data-event-params="{{item.eventParams}}" catchtap="{{item.eventHandler}}">
                         <image src="{{item.pic}}" style="{{item.img_style}}" mode="scaleToFill"></image>
