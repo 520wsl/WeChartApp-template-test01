@@ -1,0 +1,188 @@
+<!-- templates 模板页面 -->
+<!-- 图片轮播、banner 模板 -->
+<template name="zcCarousel">
+    <!-- animationEnd  动画结束回调函数
+
+        CSS 动画播放时，会发生以下三个事件：
+        animationstart -CSS 动画开始后触发
+        animationiteration - CSS 动画重复播放时触发
+        animationend - CSS 动画完成后触发 -->
+    <view class="swiper-view" style="{{data.style}}" bindanimationend="animationEnd" data-compld="{{data.compld}}">
+        <!-- wx:if="{{!data.loading && !data.loadingFail && data.content.length > 0}}"  //根据 loading 加载 成功 并且 没有 loadingFail 加载失败 并且 内容不为空 则显示 banner图
+
+            circular="true" // 是否采用衔接滑动
+            duration="750" // 滑动动画时长
+            autoplay="{{data.customFeature.autoplay}}"  // 是否自动切换、自动播放
+            vertical="{{data.customFeature.vertical}}"  // 滑动方向是否为纵向
+            interval="{{data.customFeature.interval*1000}}"  // // 播放间隔、自动切换时间间隔
+            indicator-dots="true" // 是否显示面板指示点
+            indicator-color="{{data.customFeature.indicatorColor}}"  // 指示点颜色
+            indicator-active-color="{{data.customFeature.indicatorActiveColor}}" // 当前选中的指示点颜色 -->
+        <swiper wx:if="{{!data.loading && !data.loadingFail && data.content.length > 0}}" circular="true" duration="750" autoplay="{{data.customFeature.autoplay}}" vertical="{{data.customFeature.vertical}}" interval="{{data.customFeature.interval*1000}}" indicator-dots="true" indicator-color="{{data.customFeature.indicatorColor}}" indicator-active-color="{{data.customFeature.indicatorActiveColor}}">
+            <!-- 遍历轮播内容 -->
+            <block wx:for="{{data.content}}" wx:key="{{index}}">
+                <!-- wx:if="{{data.canIUseNavigatorTarget && item.customFeature.action=='turn-to-xcx'}}" // 根据 canIUseNavigatorTarget 是否有导航 以及 定制特征的动作 是否是 turn-to-xcx 来判断 图片是否添链接
+
+                    canIUseNavigatorTarget 是否使用导航目标
+                    customFeature.action // 定制特征的动作 -->
+                <!-- 图片有链接 -->
+                <block wx:if="{{data.canIUseNavigatorTarget && item.customFeature.action=='turn-to-xcx'}}">
+                    <swiper-item>
+                        <!-- navigator 链接配置 
+                                 target="miniProgram" // 在哪个目标上发生跳转，默认当前小程序，可选值self/miniProgram 
+                                    self 当前小程序
+                                    miniProgram  别的小程序 
+                                open-type="navigate" // 跳转方式 
+                                    navigate // 对应 wx.navigateTo 或 wx.navigateToMiniProgram 的功能 // 保留当前页面，跳转到应用内的某个页面
+                                app-id="{{item.customFeature['xcx-appid']}}" // 当target="miniProgram"时有效，要打开的小程序 appId
+                                path="{{item.customFeature['xcx-page-url'] || ''}}" // 当target="miniProgram"时有效，打开的页面路径，如果为空则打开首页
+                                version="release"  //  当target="miniProgram"时有效，要打开的小程序版本，有效值 develop（开发版），trial（体验版），release（正式版），仅在当前小程序为开发版或体验版时此参数有效；
+                                                            如果当前小程序是正式版，则打开的小程序必定是正式版。 -->
+                        <navigator class="swiper-navigator" target="miniProgram" open-type="navigate" app-id="{{item.customFeature['xcx-appid']}}" path="{{item.customFeature['xcx-page-url'] || ''}}" version="release">
+                            <image class="swiper-item" src="{{item.pic}}" />
+                        </navigator>
+                    </swiper-item>
+                </block>
+                <!-- 图片没有链接 -->
+                <block wx:else>
+                    <!-- tapEventCommonHandler tap 时间 公共 处理机制 -->
+                    <swiper-item data-event-params="{{item.customFeature}}" data-compid="{{data.compld}}" catchtap="tapEventCommonHandler">
+                        <image class="swiper-item" src="{{item.pic}}" />
+                        <!-- 加了个蒙版  作用 不机到 -->
+                        <view wx:if="{{item.eventHandler == 'tapVideoPlayHandler'}}" class="carousel-video-play icon-play ico-moon"></view>
+                    </swiper-item>
+                </block>
+            </block>
+        </swiper>
+        <!-- loading 模板 -->
+        <template wx:if="{{data.loading}}" is="requestLoading"></template>
+        <!-- 加载没有数据 -->
+        <template wx:if="{{data.content.length == 0}}" is="requestNone" data="{{data:'你还未添加轮播项~'}}"></template>
+        <!-- 加载失败 -->
+        <template wx:if="{{data.loadingFail}}" is="requestFail" data="{{refreshEvent:'getCarouselData',compid:data.compId}}"></template>
+    </view>
+</template>
+<!-- 视频轮播 模板 -->
+<template name="carouselVideoPlay">
+    <view class='carouselVideoPlay' hidden='{{!data.videoUrl}}' catchtouchmove>
+        <view class='carouselVideoPlay-inner'>
+            <!-- 视屏播放关闭按钮 -->
+            <view class='carouselVideoPlay-close icon-closes ico-moon' data-compid='{{data.compId}}' bindtouchend='carouselVideoClose'></view>
+            <!-- 微信小程序 视屏播放组件 -->
+            <video wx:if="{{data.videoUrl}}" src='{{data.videoUrl}}' controls autoplay='autoplay'></video>
+        </view>
+    </view>
+</template>
+<!-- 图集、图片列表 模板 -->
+<template name="zcAlbum">
+    <!-- 模块 
+        每一个 .wxs 文件和 <wxs> 标签都是一个单独的模块。
+        每个模块都有自己独立的作用域。即在一个模块里面定义的变量与函数，默认为私有的，对其他模块不可见。
+        一个模块要想对外暴露其内部的私有变量与函数，只能通过 module.exports 实现。
+
+        解析：
+            通过 imgHeight 图片高度 和 textHeight 文字高度  * 1.6 *2.34375  返回 scroll-view  的高度 -->
+    <wxs module="albumWxsModule">
+        var scrollHeight = function(customFeature) {
+            return (parselnt(customFeature.imgHeight) + (parselnt(customFeature.textHeight) || 14) * 1.6) * 2.34375;
+        }
+        module.exports.scrollHeight = scrollHeight;
+    </wxs>
+    <!-- animationEnd  动画结束回调函数
+
+        CSS 动画播放时，会发生以下三个事件：
+        animationstart -CSS 动画开始后触发
+        animationiteration - CSS 动画重复播放时触发
+        animationend - CSS 动画完成后触发 
+        解析：
+            绑定动画完成后出发的事件 -->
+    <view class='element album {{data.html_model}}' style='{{data.style}}' bindanimationend='animationEnd' data-compid='{{data.compld}}'>
+        <!-- 解析：
+                根据 isSideslip 是否滚动  判断， 选择带滚动模块 还是 不滚动的模块。 -->
+        <!-- scroll-view 滚动模块 -->
+        <view class='album-container sideslip' wx:if="{{data.customFeature.isSideslip}}">
+            <!-- ccroll-view // 可滚动视图区域。
+            scroll-x // 允许横向滚动
+
+            white-space: nowrap  // 规定段落中的文本不进行换行
+
+            解析：
+                微信小程序 组件 ccroll-view 可滚动视图区域。 -->
+            <scroll-view scroll-x='{{true}}' style="{{'height:'+albumWxsModule.scrollHeight(data.customFeature)+'rpx;padding-top:'+data.customFeature['padding-top']+'px;white-space:nowrap;'}}">
+                <!-- 解析：
+                        遍历 内容 li -->
+                <block wx:for="{{data.li}}" wx:key="{{index}}">
+                    <!-- wx:if="{{data.canIUseNavigatorTarget && item.customFeature.action=='turn-to-xcx'}}" 
+                            canIUseNavigatorTarget 是否使用导航目标
+                            customFeature.action // 定制特征的动作 
+                        解析：
+                            根据 canIUseNavigatorTarget 是否有导航 以及 定制特征的动作 是否是 turn-to-xcx 来判断 图片是否添链接 -->
+                    <!-- 图片带连接 -->
+                    <block wx:if="{{data.canIUseNavigatorTarget && item.customFeature.action == 'turn-to-xcx'}}">
+                        <view class="{{item.li_class}}" style="{{'width:'+data.customFeature.width+';margin-left:'+data.customFeature['padding-left']+'px;'+ (index == data.li.length - 1 ? 'margin-right:'+data.customFeature['padding-left']+'px' : '')  }}">
+                            <navigator target="miniProgram" open-type="navigate" app-id="{{item.customFeature['xcx-appid']}}" path="{{item.customFeature['xcx-page-url'] || ''}}" version="release">
+                                <image src="{{item.pic}}" style="{{item.img_style}}display:block;height:{{data.customFeature.imgHeight}};" mode="scaleToFill"></image>
+                                <text class="title">{{item.title}}</text>
+                            </navigator>
+                        </view>
+                    </block>
+                    <!-- 图片不带连接 -->
+                    <block wx:else>
+                        <view class="{{item.li_class}}" style="{{'width:'+data.customFeature.width+';margin-left:'+data.customFeature['padding-left']+'px;' + (index == data.li.length -1 ? 'margin-right:' + data.customFeature['padding-left']+'px' : '')  }}" data-event-params="{{item.eventParams}}" catchtap="{{item.eventHandler}}">
+                            <image src="{{item.pic}}" style="{{item.img_style}}display:block;height: {{data.customFeature.imgHeight}};" mode="scaleToFill"></image>
+                            <text class="title">{{item.title}}}</text>
+                        </view>
+                    </block>
+                </block>
+            </scroll-view>
+        </view>
+        <!-- 不带滚动模块 -->
+        <view class='album-container background-ele clearfix' style='{{data.style}}' wx:else>
+            <block wx:for="{{data.li}}" wx:key="{{index}}">
+                <block wx:if="{{data.canIUseNavigatorTarget && item.customFeature.action == 'turn-to-xcx'}}">
+                    <view class="{{item.li_class}}" style="{{item.li_style}}">
+                        <navigator target="miniProgram" open-type="navigate" app-id="{{item.customFeature['xcx-appid']}}" path="{{item.customFeature['xcx-page-url'] || ''}}" version="release">
+                            <image src="{{item.pic}}" style="{{item.img_style}}" mode="scaleToFill"></image>
+                            <text class="title">{{item.title}}</text>
+                        </navigator>
+                    </view>
+                </block>
+                <block wx:else>
+                    <view class="{{item.li_class}}" style="{{item.li_style}}" data-event-params="{{item.eventParams}}" catchtap="{{item.eventHandler}}">
+                        <image src="{{item.pic}}" style="{{item.img_style}}" mode="scaleToFill"></image>
+                        <text class="title">{{item.title}}</text>
+                    </view>
+                </block>
+            </block>
+        </view>
+    </view>
+</template>
+<!-- 加载loading -->
+<template name="requestLoading">
+    <view class="loading-wrap">
+        <view class="loading-view">
+            <view class="loading-dot1"></view>
+            <view class="loading-dot2"></view>
+        </view>
+    </view>
+</template>
+<!-- 加载没有数据 -->
+<template name="requestNone">
+    <view class='request-none'>
+        <image src='http://cdn.jisuapp.cn/static/webapp/images/request-none.png' mode='widthFix'></image>
+        <view>{{data || '暂无数据'}}</view>
+    </view>
+</template>
+<!-- 加载失败 -->
+<template name="requestFail">
+    <view class="request-fail">
+        <view>数据加载失败~</view>
+        <button class="request-refresh-btn" data-compid="{{compId}}" bindtap="{{refreshEvent}}">
+            刷新重试
+        </button>
+    </view>
+</template>
+<!-- 加载完所有数据 -->
+<template name="requestAll">
+    <view class="request-all">没有更多了</view>
+</template>

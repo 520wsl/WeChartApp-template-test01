@@ -1,13 +1,34 @@
-<!--pages/page10000/page10000.wxml-->
+<!-- pages/page10000/page10000.wxml -->
 <import src="/components/wxParse/wxParse.wxml" />
 <import src="/components/templates/templates.wxml" />
-
 <view class="app" hidden="{{page_hidden}}">
-    1
-    <!-- web-wiew组件 web-view 组件是一个可以用来承载网页的容器，会自动铺满整个小程序页面。-->
-    <web-view wx:if="{{false}}" src="{{false}}"></web-view>
+    <!-- ---------------------------------------banner模块--------------------------------------- -->
+    <!-- banner 控制banner是否显示 -->
+    <block wx:if="{{!carouserl1.hidden}}">
+        <view class="ele-container">
 
-    <!-- 分享 页面 二维码 组件 -->
-    <component-share pagaQRCodeData="{{pagaQRCodeData}}"></component-share>
+            <!-- 根据detail_data 的 segment 判断 传递给banner的值 -->
+            <block wx:if="{{detail_data && detail_data[carousel1.customFeature.segment]}}">
+                <!-- 图片轮播、banner 模板 -->
+                <template is="zcCarousel" data="{{data:carousel1,real_value:detail_data[carousel1.customFeature.segment],parent_from:item,detail_data:detail_data}}"></template>
+            </block>
+            <block wx:else>
+                <!-- 图片轮播、banner 模板 -->
+                <template is="zcCarousel" data="{{data:carousel1}}"></template>
+            </block>
+
+        </view>
+
+        <!-- 视频轮播 模板 -->
+        <template is="carouselVideoPlay" data="{{data:carousel1}}"></template>
+    </block>
+    <!-- ---------------------------------------banner模块--------------------------------------- -->
+
+    <!-- 图集、图片列表 -->
+    <view class='ele-container' wx:if="{{!album2.hidden}}">
+        <!-- 图集、图片列表 -->
+        <template is="zcAlbum" data="{{data:album2}}"></template>
+    </view>
+
 
 </view>
